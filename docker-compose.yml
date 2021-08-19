@@ -94,8 +94,6 @@ services:
         context: metalnx-db
         dockerfile: Dockerfile
     hostname: irods-metalnx-db.example.org
-    ports:
-      - "5432:5432"
     networks:
       default:
         aliases:
