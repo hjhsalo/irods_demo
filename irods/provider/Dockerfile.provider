@@ -1,7 +1,7 @@
 #
 # iRODS Provider Image.
 #
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 # TODO: Remove this line when apt gets its stuff together
 RUN sed --in-place --regexp-extended "s/(\/\/)(archive\.ubuntu)/\1nl.\2/" /etc/apt/sources.list
