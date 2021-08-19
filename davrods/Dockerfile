@@ -1,18 +1,20 @@
-FROM ubuntu:18.04
+FROM centos:7
 
-RUN apt-get update && apt-get install -y wget curl apache2 sudo lsb-release apt-transport-https gnupg
+RUN yum update -y && \
+    yum install -y epel-release && \
+    yum install -y wget curl apache2 gnupg python python-pip python-jsonschema python-requests
 
-RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | sudo apt-key add - && \
-    echo "deb [arch=amd64] https://packages.irods.org/apt/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/renci-irods.list && \
-    sudo apt-get update
+RUN rpm --import https://packages.irods.org/irods-signing-key.asc && \
+    wget -qO - https://packages.irods.org/renci-irods.yum.repo | tee /etc/yum.repos.d/renci-irods.yum.repo
 
-RUN wget -O /davrods.deb https://github.com/UtrechtUniversity/davrods/releases/download/4.2.8_1.5.0/davrods-4.2.8-1.5.0.deb && apt install -y /davrods.deb
+RUN wget -O /davrods.rpm https://github.com/UtrechtUniversity/davrods/releases/download/4.2.10_1.5.0/davrods-4.2.10_1.5.0-1.rpm && \
+    yum install -y --nogpgcheck localinstall davrods.rpm
 
-RUN sed -i "s/^#//g" /etc/apache2/sites-available/davrods-vhost.conf
-RUN sed -i "s/ServerName.*/ServerName irods-davrods.example.org/" /etc/apache2/sites-available/davrods-vhost.conf
-RUN sed -i "s/#DavrodsServer.*/DavrodsServer icat.example.org 1247/" /etc/apache2/sites-available/davrods-vhost.conf
+RUN sed -i "s/^#//g" /etc/httpd/conf.d/davrods-vhost.conf
+RUN sed -i "s/ServerName.*/ServerName irods-davrods.example.org/" /etc/httpd/conf.d/davrods-vhost.conf
+RUN sed -i "s/#DavrodsServer.*/DavrodsServer icat.example.org 1247/" /etc/httpd/conf.d/davrods-vhost.conf
 
-RUN a2enmod dav && a2enmod davrods && a2ensite davrods-vhost && a2dissite 000-default && service apache2 restart
+#RUN a2enmod dav && a2enmod davrods && a2ensite davrods-vhost && a2dissite 000-default && service apache2 restart
 
 RUN curl -fSL https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz -o dockerize-linux-amd64-v0.6.1.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
