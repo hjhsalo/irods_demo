@@ -15,13 +15,15 @@ sed -i 's/CS_NEG_DONT_CARE/CS_NEG_REFUSE/' /var/lib/irods/packaging/core.re.temp
 
 # Set up iRODS.
 if [ ! -e /var/lib/irods/VERSION.json ]; then
-python /var/lib/irods/scripts/setup_irods.py < /var/lib/irods/packaging/localhost_setup_postgres.input
+    python /var/lib/irods/scripts/setup_irods.py < /var/lib/irods/packaging/localhost_setup_postgres.input
+    sudo -iu irods bash -c "cd /usr/sbin; ./irodsServer -u"
 
-cd /var/lib/irods/scripts
-python configure_audit_plugin.py
-python configure_unified_storage_tiering_plugin.py
-python configure_users.py
-pkill irodsServer
+    cd /var/lib/irods/scripts
+    python configure_audit_plugin.py
+    python configure_unified_storage_tiering_plugin.py
+    python configure_users.py
+
+    pkill irodsServer
 fi
 sudo -iu irods bash -c "cd /usr/sbin; ./irodsServer -u"
 
