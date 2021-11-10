@@ -18,11 +18,15 @@ if [ ! -e /var/lib/irods/VERSION.json ]; then
 python /var/lib/irods/scripts/setup_irods.py < /var/lib/irods/packaging/localhost_setup_postgres.input
 
 cd /var/lib/irods/scripts
-python configure_audit_plugin.py
-python configure_update_collection_mtime_plugin.py
-python configure_unified_storage_tiering_plugin.py
+# python configure_audit_plugin.py
+# python configure_update_collection_mtime_plugin.py
+# python configure_unified_storage_tiering_plugin.py
 python configure_users.py
-pkill irodsServer
+## Use instead of pkill since sometimes irodsServer is not killed
+## quickly enough
+## TODO: Make a more universal check for nonexistence of irodsServer
+#pkill irodsServer
+start-stop-daemon --stop --oknodo --retry 15 -n irodsServer
 fi
 sudo -iu irods bash -c "cd /usr/sbin; ./irodsServer -u"
 

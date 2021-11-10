@@ -6,7 +6,7 @@ RUN apt-get update && \
 RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | apt-key add -; \
     echo "deb [arch=amd64] https://packages.irods.org/apt/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/renci-irods.list; \
     apt-get update && \
-    apt-get install -y irods-icommands
+    apt-get install -y irods-runtime=4.2.8 irods-icommands=4.2.8
 
 COPY irods_environment.json /root/.irods/irods_environment.json
 COPY start_client.sh /

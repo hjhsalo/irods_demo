@@ -25,93 +25,93 @@ services:
         aliases:
           - client.example.org
 
-  irods-audit-elk-stack:
-    image: irods/irods_audit_elk_stack:latest
-    hostname: irods-audit-elastic-stack.example.org
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-      - "5601:5601"
-      - "9200:9200"
-    networks:
-      default:
-        aliases:
-          - irods-audit-elastic-stack.example.org
-    volumes:
-      - "./audit/entrypoint.sh:/audit/entrypoint.sh:ro"
-    entrypoint: /audit/entrypoint.sh
+  # irods-audit-elk-stack:
+  #   image: irods/irods_audit_elk_stack:latest
+  #   hostname: irods-audit-elastic-stack.example.org
+  #   ports:
+  #     - "15672:15672"
+  #     - "5672:5672"
+  #     - "5601:5601"
+  #     - "9200:9200"
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - irods-audit-elastic-stack.example.org
+  #   volumes:
+  #     - "./audit/entrypoint.sh:/audit/entrypoint.sh:ro"
+  #   entrypoint: /audit/entrypoint.sh
 
-  irods-automated-ingest:
-    build:
-        context: ingest
-        dockerfile: Dockerfile
-    hostname: irods-ingest.example.org
-    networks:
-      default:
-        aliases:
-          - irods-ingest.example.org
-    volumes:
-      - "/tmp/landing_zone:/tmp/landing_zone:rw"
-      - "/tmp/ingested:/tmp/ingested:rw"
-    depends_on:
-      - irods-catalog-provider
+  # irods-automated-ingest:
+  #   build:
+  #       context: ingest
+  #       dockerfile: Dockerfile
+  #   hostname: irods-ingest.example.org
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - irods-ingest.example.org
+  #   volumes:
+  #     - "/tmp/landing_zone:/tmp/landing_zone:rw"
+  #     - "/tmp/ingested:/tmp/ingested:rw"
+  #   depends_on:
+  #     - irods-catalog-provider
 
-  irods-nfsrods:
-    build:
-        context: nfsrods
-        dockerfile: Dockerfile
-    hostname: irods-nfsrods.example.org
-    networks:
-      default:
-        aliases:
-          - irods-nfsrods.example.org
-    depends_on:
-      - irods-catalog-provider
-    ports:
-      - "2049:2049"
-    volumes:
-      - "./nfsrods/nfsrods_config:/nfsrods_config:ro"
-      - "/etc/passwd:/etc/passwd:ro"
+  # irods-nfsrods:
+  #   build:
+  #       context: nfsrods
+  #       dockerfile: Dockerfile
+  #   hostname: irods-nfsrods.example.org
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - irods-nfsrods.example.org
+  #   depends_on:
+  #     - irods-catalog-provider
+  #   ports:
+  #     - "2049:2049"
+  #   volumes:
+  #     - "./nfsrods/nfsrods_config:/nfsrods_config:ro"
+  #     - "/etc/passwd:/etc/passwd:ro"
 
-  irods-metalnx:
-    #image: irods/metalnx
-    build:
-        context: metalnx
-        dockerfile: Dockerfile
-    hostname: irods-metalnx.example.org
-    ports:
-      - "8080:8080"
-    volumes:
-      - "./metalnx/mylocal-irods-ext:/etc/irods-ext"
-    networks:
-      default:
-        aliases:
-          - irods-metalnx.example.org
-    depends_on:
-      - irods-metalnx-db
-  irods-metalnx-db:
-    build:
-        context: metalnx-db
-        dockerfile: Dockerfile
-    hostname: irods-metalnx-db.example.org
-    ports:
-      - "5432:5432"
-    networks:
-      default:
-        aliases:
-          - irods-metalnx-db.example.org
+  # irods-metalnx:
+  #   #image: irods/metalnx
+  #   build:
+  #       context: metalnx
+  #       dockerfile: Dockerfile
+  #   hostname: irods-metalnx.example.org
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - "./metalnx/mylocal-irods-ext:/etc/irods-ext"
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - irods-metalnx.example.org
+  #   depends_on:
+  #     - irods-metalnx-db
+  # irods-metalnx-db:
+  #   build:
+  #       context: metalnx-db
+  #       dockerfile: Dockerfile
+  #   hostname: irods-metalnx-db.example.org
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - irods-metalnx-db.example.org
 
-  irods-davrods:
-    build:
-        context: davrods
-        dockerfile: Dockerfile
-    hostname: irods-davrods.example.org
-    ports:
-      - "80:80"
-    networks:
-      default:
-        aliases:
-          - irods-davrods.example.org
+  # irods-davrods:
+  #   build:
+  #       context: davrods
+  #       dockerfile: Dockerfile
+  #   hostname: irods-davrods.example.org
+  #   ports:
+  #     - "80:80"
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - irods-davrods.example.org
 
   #irods-rest:
     #image: diceunc/rest
